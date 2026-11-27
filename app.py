@@ -28,10 +28,7 @@ if "summary" not in st.session_state:
 
 # PDF UPLOAD AND EXTRACTION
 
-uploaded_file = st.file_uploader(
-    "Upload your PDF document",
-    type=["pdf"]
-)
+uploaded_file = st.file_uploader("Upload your PDF document", type=["pdf"])
 
 if uploaded_file is not None:
 
@@ -69,27 +66,15 @@ if uploaded_file is not None:
 
     col1, col2 = st.columns(2)
 
-    col1.metric(
-        "Total pages",
-        len(PdfReader(BytesIO(file_bytes)).pages)
-    )
+    col1.metric("Total pages", len(PdfReader(BytesIO(file_bytes)).pages))
 
-    col2.metric(
-        "Characters extracted",
-        len(st.session_state.document_text)
-    )
+    col2.metric( "Characters extracted", len(st.session_state.document_text))
 
     if len(st.session_state.document_text) >= 15000:
-        st.warning(
-            "DOCAL currently uses a maximum of "
-            "15,000 characters from the document."
-        )
+        st.warning( "DOCAL currently uses a maximum of 15,000 characters from the document.")
 
     if not st.session_state.document_text.strip():
-        st.warning(
-            "No readable text was found. "
-            "This PDF may contain scanned images."
-        )
+        st.warning("No readable text was found. This PDF may contain scanned images.")
 
 
     # AI SUMMARISATION
@@ -110,31 +95,20 @@ if uploaded_file is not None:
                     response = ollama.chat(
                         model="llama3.2:3b",
                         messages=[
-                            {
-                                "role": "system",
-                                "content": (
-                                    "You are DOCAL, a professional document "
-                                    "analysis assistant. Create accurate, "
-                                    "well-structured summaries. Only use "
-                                    "information from the supplied document."
-                                )
-                            },
-                            {
-                                "role": "user",
-                                "content": (
-                                    "Summarise this document. Include its "
-                                    "main arguments, important information "
-                                    "and conclusions:\n\n"
-                                    + st.session_state.document_text
-                                )
-                            }
+                            {"role": "system",
+                             "content": ("You are DOCAL, a professional document "
+                                            "analysis assistant. Create accurate, "
+                                            "well-structured summaries. Only use "
+                                            "information from the supplied document.")},
+                            {"role": "user",
+                             "content": ("Summarise this document. Include its"
+                                         "main arguments, important information "
+                                         "and conclusions:\n\n"
+                                         + st.session_state.document_text)}
                         ]
                     )
 
-                    st.session_state.summary = (
-                        response["message"]["content"]
-                    )
-
+                    st.session_state.summary = (response["message"]["content"])
                 except Exception as e:
                     st.error(f"AI error: {e}")
 
@@ -147,10 +121,7 @@ if uploaded_file is not None:
     st.divider()
     st.subheader("💬 Chat with your document")
 
-    st.write(
-        "Ask DOCAL anything about the information "
-        "in your uploaded PDF."
-    )
+    st.write("Ask DOCAL anything about the information in your uploaded PDF.")
 
     # Display previous messages
 
@@ -161,16 +132,12 @@ if uploaded_file is not None:
 
     # Question input
 
-    user_question = st.text_input(
-        "Your question:",
-        placeholder="What is this document about?",
-        key="document_question"
-    )
+    user_question = st.text_input("Your question:",
+                                  placeholder="What is this document about?",
+                                  key="document_question")
 
-    send_question = st.button(
-        "Send question",
-        key="send_document_question"
-    )
+    send_question = st.button("Send question",
+                              key="send_document_question")
 
     # Process question
 
@@ -181,12 +148,7 @@ if uploaded_file is not None:
 
         else:
 
-            st.session_state.messages.append(
-                {
-                    "role": "user",
-                    "content": user_question
-                }
-            )
+            st.session_state.messages.append({"role": "user", "content": user_question})
 
             with st.chat_message("user"):
                 st.markdown(user_question)
@@ -203,11 +165,9 @@ if uploaded_file is not None:
             messages = [
                 {
                     "role": "system",
-                    "content": (
-                        system_prompt
+                    "content": (system_prompt
                         + "\n\nDOCUMENT CONTENT:\n"
-                        + st.session_state.document_text
-                    )
+                        + st.session_state.document_text)
                 }
             ]
 
@@ -218,21 +178,13 @@ if uploaded_file is not None:
                 with st.spinner("DOCAL is thinking..."):
 
                     try:
-                        response = ollama.chat(
-                            model="llama3.2:3b",
-                            messages=messages
-                        )
+                        response = ollama.chat(model="llama3.2:3b", messages=messages)
 
                         answer = response["message"]["content"]
 
                         st.markdown(answer)
 
-                        st.session_state.messages.append(
-                            {
-                                "role": "assistant",
-                                "content": answer
-                            }
-                        )
+                        st.session_state.messages.append({"role": "assistant","content": answer})
 
                         st.rerun()
 
