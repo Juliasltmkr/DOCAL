@@ -1,2 +1,2 @@
-#DOCAL
-###DOCAL is a Python-based AI document assistant that allows users to upload PDF files, generate summaries and ask questions about their documents. It uses Streamlit for its interface and Ollama to run the Llama 3.2 language model locally. I developed DOCAL as a personal project to gain practical experience in Python programming, artificial intelligence, software development and problem-solving.
+# DOCAL
+### DOCAL is a Python-based AI document assistant that allows users to upload PDF files, generate summaries and ask questions about their documents. It uses Streamlit for its interface and Ollama to run the Llama 3.2 language model locally. I developed DOCAL as a personal project to gain practical experience in Python programming, artificial intelligence, software development and problem-solving.
