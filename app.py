@@ -104,8 +104,7 @@ if uploaded_file is not None:
                              "content": ("Summarise this document. Include its"
                                          "main arguments, important information "
                                          "and conclusions:\n\n"
-                                         + st.session_state.document_text)}
-                        ]
+                                         + st.session_state.document_text)}]
                     )
 
                     st.session_state.summary = (response["message"]["content"])
@@ -153,23 +152,15 @@ if uploaded_file is not None:
             with st.chat_message("user"):
                 st.markdown(user_question)
 
-            system_prompt = """
-            You are DOCAL, a professional document analysis assistant.
-
+            system_prompt = """You are DOCAL, a professional document analysis assistant.
             Answer questions using the supplied document.
             Be clear, accurate and helpful.
             Do not invent information.
-            If the answer is not in the document, say so.
-            """
+            If the answer is not in the document, say so."""
 
             messages = [
-                {
-                    "role": "system",
-                    "content": (system_prompt
-                        + "\n\nDOCUMENT CONTENT:\n"
-                        + st.session_state.document_text)
-                }
-            ]
+                {"role": "system",
+                 "content": (system_prompt + "\n\nDOCUMENT CONTENT:\n" + st.session_state.document_text}]
 
             messages.extend(st.session_state.messages)
 
